@@ -10,12 +10,15 @@ import ToolBar from './components/ToolBar.vue'
 
 <template>
   <el-container class="container">
-    <el-header class="header"><ToolBar/></el-header>
-    <el-main class="main"><Scroll /></el-main>
+    <el-header class="header">
+      <ToolBar />
+    </el-header>
+    <el-main class="main" style="padding-left: 0;padding-right: 0;">
+      <Scroll />
+    </el-main>
   </el-container>
   <!-- <img alt="Vue logo" src="./assets/logo.png" />
   <HelloWorld msg="Hello Vue 3 + Vite" />-->
-  
 </template>
 
 <style>
@@ -27,15 +30,15 @@ import ToolBar from './components/ToolBar.vue'
   color: #2c3e50;
   /* margin-top: 60px; */
 }
-.container{
+.container {
   display: flex;
   justify-content: center;
 }
-.header{
+.header {
   display: flex;
   justify-content: center;
 }
-.main{
+.main {
   padding-top: 10px;
 }
 </style>

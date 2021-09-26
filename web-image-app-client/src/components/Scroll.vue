@@ -7,9 +7,13 @@
                 <div>{{ index + 1 }}</div>
                 <p>{{ pic.id }}</p>
                 <!--图片加载很慢是图片链接的服务器在国外-->
-                <el-image style="width: 300px; height: 200px" :src="pic.src" fit="cover"></el-image>
-                <button  class="btn watch-btn" @click="handleClick(pic.src)">预览</button>
-                <button  class="btn copy-btn" @click="copy"  :data-clipboard-text="pic.src">复制链接</button>
+                <el-image
+                    style="width: 300px; height: 200px"
+                    :src="'http://118.31.62.229:8080/img/' + pic.url"
+                    fit="cover"
+                ></el-image>
+                <button class="btn watch-btn" @click="handleClick(pic.src)">预览</button>
+                <button class="btn copy-btn" @click="copy" :data-clipboard-text="pic.src">复制链接</button>
             </div>
         </div>
         <!-- 加载提示语 -->
@@ -22,45 +26,43 @@
 import { defineComponent, ref, computed, reactive, toRefs } from 'vue'
 
 import Clipboard from 'clipboard'
+import axios from 'axios'
 
 export default defineComponent({
     setup() {
-        // 模拟一个图片数据结构(仅为测试，请在有正式数据删除此变量)
+        // 一个图片数据结构
         let picArr = reactive([])
 
         const loading = ref(false) // 设置是否显示“加载中”提示语用的变量
         const noMore = computed(() => picArr.length >= 60) // 设置关闭请求上线
-        const disabled = computed(() => loading.value || noMore.value) 
+        const disabled = computed(() => loading.value || noMore.value)
 
         //预览函数
         const handleClick = (src) => {
-           window.open(src,'_blank')
+            window.open(src, '_blank')
         }
         //复制链接函数
-        const copy = (e)=>{
-            const btnCopy = new Clipboard(e.target); 
+        const copy = (e) => {
+            const btnCopy = new Clipboard(e.target);
+        }
+
+        // 请求图片
+        const getPic = async () => {
+            let res = await axios.get('/images')
+            return res.data
+        }
+
+        // 获取图片地址
+        const getPicUrl = async (url) => {
+            let res = await axios.get(`/img/${url}`)
+            return res.data
         }
 
         const load = () => {
             loading.value = true
-            setTimeout(() => {
-                /*
-                    此处应该请求api，去获取图片资源，这里要注意请求后端的参数
-                */
-                // 使用模拟数据
-                let new_arr = [
-                    { id: "001", src: 'https://w.wallhaven.cc/full/72/wallhaven-72rd8e.jpg', name: '风景' },
-                    { id: '002', src: 'https://w.wallhaven.cc/full/1k/wallhaven-1kg8g1.jpg', name: '键盘' },
-                    { id: '003', src: ' https://w.wallhaven.cc/full/e7/wallhaven-e7wjeo.jpg', name: '山' },
-                    { id: "004", src: 'https://w.wallhaven.cc/full/72/wallhaven-72rd8e.jpg', name: '风景' },
-                    { id: '005', src: 'https://w.wallhaven.cc/full/1k/wallhaven-1kg8g1.jpg', name: '键盘' },
-                    { id: '006', src: ' https://w.wallhaven.cc/full/e7/wallhaven-e7wjeo.jpg', name: '山' },
-                    { id: "007", src: 'https://w.wallhaven.cc/full/72/wallhaven-72rd8e.jpg', name: '风景' },
-                    { id: '008', src: 'https://w.wallhaven.cc/full/1k/wallhaven-1kg8g1.jpg', name: '键盘' },
-                    { id: '009', src: ' https://w.wallhaven.cc/full/e7/wallhaven-e7wjeo.jpg', name: '山' },
-                    { id: "010", src: 'https://w.wallhaven.cc/full/72/wallhaven-72rd8e.jpg', name: '风景' },
-                ]
-                // 拼接数组
+            setTimeout(async () => {
+                let new_arr = await getPic()
+                console.log(new_arr)
                 picArr.push(...new_arr)
                 loading.value = false
             }, 500) // 这里控制延迟时间
@@ -82,10 +84,11 @@ export default defineComponent({
 
 <style lang="scss">
 .infinite-list-wrapper {
+    height: calc(100vh - 100px);
     text-align: center;
 
     .list {
-        width: 1300px; // 请注意根据图片组件实际宽度调整此处的宽度值
+        width: 1285px; // 请注意根据图片组件实际宽度调整此处的宽度值
         padding: 0;
         margin: 0 auto;
         list-style: none;
@@ -112,24 +115,23 @@ export default defineComponent({
             color: black;
             border-radius: 10px;
             opacity: 0;
-            transition: opacity .5s;
+            transition: opacity 0.5s;
 
-            &:hover{
+            &:hover {
                 background-color: #000;
                 color: white;
             }
-            
-            &.copy-btn{
+
+            &.copy-btn {
                 right: 30px;
             }
 
-            &.watch-btn{
+            &.watch-btn {
                 left: 30px;
             }
         }
 
-
-        &:hover{
+        &:hover {
             .btn {
                 opacity: 1;
             }
