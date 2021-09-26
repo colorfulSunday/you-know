@@ -1,24 +1,46 @@
 <template>
-    <div class="infinite-list-wrapper" style="overflow:auto;">
-        <div v-infinite-scroll="load" class="list" infinite-scroll-disabled="disabled">
-            <!-- 注意绑定的key值，这对图片删除等操作确定是哪个图片子组件很重要 -->
-            <div v-for="(pic,index) in picArr" :key="pic.id" class="list-item">
-                <!--这里放图片组件（7-11行）-->
-                <div>{{ index + 1 }}</div>
-                <p>{{ pic.id }}</p>
-                <!--图片加载很慢是图片链接的服务器在国外-->
-                <el-image
-                    style="width: 300px; height: 200px"
-                    :src="'http://118.31.62.229:8080/img/' + pic.url"
-                    fit="cover"
-                ></el-image>
-                <button class="btn watch-btn" @click="handleClick(pic.src)">预览</button>
-                <button class="btn copy-btn" @click="copy" :data-clipboard-text="pic.src">复制链接</button>
+    <div>
+        <div class="infinite-list-wrapper" style="overflow:auto;">
+            <div v-infinite-scroll="load" class="list" infinite-scroll-disabled="disabled">
+                <!-- 注意绑定的key值，这对图片删除等操作确定是哪个图片子组件很重要 -->
+                <div v-for="(pic,index) in picArr" :key="pic.id" class="list-item">
+                    <!--图片加载很慢是图片链接的服务器在国外-->
+                    <el-image
+                        style="width: 300px; height: 200px"
+                        :src="'http://118.31.62.229:8080/img/' + pic.url"
+                        fit="cover"
+                    ></el-image>
+                    <button class="btn watch-btn" @click="handleClick(pic.url)">预览</button>
+                    <button
+                        class="btn copy-btn"
+                        style="width:120px"
+                        @click="copy"
+                        :data-clipboard-text="pic.url"
+                    >复制链接</button>
+                    <!-- <el-icon>
+                        <data-board />
+                    </el-icon>
+                    <el-icon>
+                        <link />
+                    </el-icon>-->
+                    <div>
+                        <span style="font-weight:600">序号：{{ index + 1 }}</span>
+                        &nbsp;&nbsp;图片名称:{{ pic.url == null ? '无此文件' : pic.url }}
+                    </div>
+                </div>
             </div>
+            <!-- 加载提示语 -->
+            <div v-if="loading" style="margin-top:20px">加载中，请稍等...</div>
+            <div v-if="noMore">已无更多图片</div>
         </div>
-        <!-- 加载提示语 -->
-        <div v-if="loading" style="margin-top:20px">加载中，请稍等...</div>
-        <div v-if="noMore">已无更多图片</div>
+        <el-dialog v-model="dialogVisible" title="图片预览" width="40%">
+            <el-image style :src="'http://118.31.62.229:8080/img/' + picSrc" fit="cover"></el-image>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button type="primary" @click="dialogVisible = false">确定</el-button>
+                </span>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
@@ -33,13 +55,20 @@ export default defineComponent({
         // 一个图片数据结构
         let picArr = reactive([])
 
+        // 弹窗控制
+        let dialogVisible = ref(false)
+        let picSrc = ref('')
+
         const loading = ref(false) // 设置是否显示“加载中”提示语用的变量
         const noMore = computed(() => picArr.length >= 60) // 设置关闭请求上线
         const disabled = computed(() => loading.value || noMore.value)
 
         //预览函数
-        const handleClick = (src) => {
-            window.open(src, '_blank')
+        const handleClick = (e) => {
+            // window.open(src, '_blank')
+            dialogVisible.value = true
+            picSrc.value = e
+            console.log(e)
         }
         //复制链接函数
         const copy = (e) => {
@@ -76,7 +105,9 @@ export default defineComponent({
             // (临时充当图片组件所涉及的变量)
             picArr,
             handleClick,
-            copy
+            copy,
+            dialogVisible,
+            picSrc,
         }
     },
 })
@@ -100,7 +131,7 @@ export default defineComponent({
 
     .list-item {
         position: relative;
-        background-color: #6495ff;
+        // background-color: #6495ff;
         margin-left: 10px;
         margin-right: 10px;
         margin-top: 10px;
@@ -112,10 +143,11 @@ export default defineComponent({
             width: 70px;
             height: 30px;
             border: none;
-            color: black;
+            color: rgb(209, 209, 209);
             border-radius: 10px;
             opacity: 0;
             transition: opacity 0.5s;
+            background-color: #000;
 
             &:hover {
                 background-color: #000;
