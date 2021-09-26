@@ -1,0 +1,21 @@
+{
+  "name": "bin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "auto_cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "clear": "^0.1.0",
+    "commander": "^8.2.0",
+    "ejs": "^3.1.6",
+    "execa": "^5.1.1",
+    "fs-extra": "^10.0.0",
+    "inquirer": "^8.1.5",
+    "path": "^0.12.7",
+    "prettier": "^2.4.1"
+  }
+}
