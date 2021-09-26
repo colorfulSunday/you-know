@@ -18,25 +18,31 @@ const start=(async ()=>{
 	
 	// build
 	log('Frontend building...');
-	await execa('npm run build --prefix '+path.resolve(__dirname,'..')
+	await execa('npm i --prefix '+path.resolve(__dirname,'..')+'\\web-image-app-client'
 	,{stdio:[2,2,2]})
-	.catch(err=>return console.error(err));
+	.catch(err=>{throw new Error('');});
+	await execa('npm run build --prefix '+path.resolve(__dirname,'..')+'\\web-image-app-client'
+	,{stdio:[2,2,2]})
+	.catch(err=>{throw new Error('');});
 	
 	//
 	log('Creating config...');
 	const config=await conf();
 	// console.log(config);
-	fs.writeFileSync(path.resolve(__dirname,'../..')+'\\web-image-app-server\\config\\config.js',config,'utf-8')
-	.then(()=>log('success'));
+	fs.writeFileSync(path.resolve(__dirname,'..')+'\\web-image-app-server\\config\\config.js',config);
 	//
 	log('Moving ./dist to backend...');
 	await move();
 	
 	//
 	log('Starting serve...');
-	await execa('npm start --prefix '+path.resolve(__dirname,'../..')+'\\web-image-app-server'
+	await execa('npm i --prefix '+path.resolve(__dirname,'..')+'\\web-image-app-server'
 	,{stdio:[2,2,2]})
-	.catch(err=>return console.error(err));
+	.catch(err=>{console.log('')});
+	await execa('npm start --prefix '+path.resolve(__dirname,'..')+'\\web-image-app-server'
+	,{stdio:[2,2,2]})
+	.catch(err=>{console.log('')});
+	
 });
 
 module.exports=start;

@@ -1,0 +1,32 @@
+{
+  "name": "you-know",
+  "version": "1.0.0",
+  "description": "PRD 文档地址：https://adhmb4s314.feishu.cn/docs/doccnRfJyJ1WrkyH8FmzxmsC59f",
+  "main": "auto_cli/auto_cli.js",
+  "bin":{
+    "auto":"auto_cli/auto_cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/colorfulSunday/you-know.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/colorfulSunday/you-know/issues"
+  },
+  "homepage": "https://github.com/colorfulSunday/you-know#readme",
+  "dependencies": {
+    "clear": "^0.1.0",
+    "commander": "^8.2.0",
+    "ejs": "^3.1.6",
+    "execa": "^5.1.1",
+    "fs-extra": "^10.0.0",
+    "inquirer": "^8.1.5",
+    "prettier": "^2.4.1"
+  },
+  "devDependencies": {}
+}

@@ -6,12 +6,8 @@ const ejs=require('ejs');
 const path=require('path');
 const prettier=require('prettier');
 
-function get_path(){
-	return path.resolve(__dirname);
-}
-
 const conf=(async()=>{
-	const temp=fs.readFileSync(get_path()+'\\config.ejs').toString();
+	const temp=fs.readFileSync(path.resolve(__dirname)+'\\config.ejs').toString();
 	const config=await inquirer.prompt([
 		{
 			type:'input',
