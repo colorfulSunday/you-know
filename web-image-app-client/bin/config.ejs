@@ -32,12 +32,12 @@ module.exports = appInfo => {
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
   };
   config.sequelize = {
-    dialect: <%= dialect %>
-    host: <%= host %>
-    port: <%= port %>
-    database: <%= database %>
-    username: <%= username %>
-    password: <%= password %>
+    dialect: '<%= dialect %>',
+    host: '<%= host %>',
+    port: <%= port %>,
+    database: '<%= database %>',
+    username: '<%= username %>',
+    password: '<%= password %>',
   };
   // 上传格式和大小限制
   config.multipart = {
