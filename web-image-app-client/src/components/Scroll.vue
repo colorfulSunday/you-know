@@ -82,7 +82,6 @@ export default defineComponent({
 
 <style lang="scss">
 .infinite-list-wrapper {
-    height: calc(100vh);
     text-align: center;
 
     .list {
@@ -93,6 +92,7 @@ export default defineComponent({
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
+        border: 1px solid #666;
     }
 
     .list-item {
