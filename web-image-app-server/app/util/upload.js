@@ -2,15 +2,7 @@
 
 const fs = require('mz/fs');
 const path = require('path');
-const os = require('os');
 const { encodeBase62 } = require('./base62');
-
-let uploadDir;
-if (os.type() !== 'Linux') {
-  uploadDir = 'D:\\upload';
-} else {
-  uploadDir = '/root/data/upload';
-}
 
 /**
  * 上传文件
