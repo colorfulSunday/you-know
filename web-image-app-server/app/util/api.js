@@ -23,17 +23,19 @@ module.exports = {
    * @param {*} ctx 上下文
    */
   async list(ctx) {
-    let obj = {};
+    const obj = {};
     if (ctx.query) {
       const filter = {};
       for (const key in ctx.query) {
-        filter[key] = {
-          [Op.like]: `%${ctx.query[key]}%`,
-        };
+        if (key === 'limit' || key === 'offset') {
+          obj[key] = parseInt(ctx.query[key]);
+        } else {
+          filter[key] = {
+            [Op.like]: `%${ctx.query[key]}%`,
+          };
+        }
       }
-      obj = {
-        where: filter,
-      };
+      obj.where = filter;
     }
     ctx.body = await ctx.list.findAll(obj);
   },
