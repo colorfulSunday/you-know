@@ -112,8 +112,13 @@ export default defineComponent({
             color: black;
             border-radius: 10px;
             opacity: 0;
-            transition: all .5s;
+            transition: opacity .5s;
 
+            &:hover{
+                background-color: #000;
+                color: white;
+            }
+            
             &.copy-btn{
                 right: 30px;
             }
