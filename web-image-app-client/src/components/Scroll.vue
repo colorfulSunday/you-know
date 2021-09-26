@@ -8,6 +8,8 @@
                 <p>{{ pic.id }}</p>
                 <!--图片加载很慢是图片链接的服务器在国外-->
                 <el-image style="width: 300px; height: 200px" :src="pic.src" fit="cover"></el-image>
+                <button  class="btn watch-btn" @click="handleClick(pic.src)">预览</button>
+                <button  class="btn copy-btn" @click="copy"  :data-clipboard-text="pic.src">复制链接</button>
             </div>
         </div>
         <!-- 加载提示语 -->
@@ -19,6 +21,8 @@
 <script lang="ts">
 import { defineComponent, ref, computed, reactive, toRefs } from 'vue'
 
+import Clipboard from 'clipboard'
+
 export default defineComponent({
     setup() {
         // 模拟一个图片数据结构(仅为测试，请在有正式数据删除此变量)
@@ -26,8 +30,16 @@ export default defineComponent({
 
         const loading = ref(false) // 设置是否显示“加载中”提示语用的变量
         const noMore = computed(() => picArr.length >= 60) // 设置关闭请求上线
-        const disabled = computed(() => loading.value || noMore.value)
+        const disabled = computed(() => loading.value || noMore.value) 
 
+        //预览函数
+        const handleClick = (src) => {
+           window.open(src,'_blank')
+        }
+        //复制链接函数
+        const copy = (e)=>{
+            const btnCopy = new Clipboard(e.target); 
+        }
 
         const load = () => {
             loading.value = true
@@ -61,6 +73,8 @@ export default defineComponent({
             load,
             // (临时充当图片组件所涉及的变量)
             picArr,
+            handleClick,
+            copy
         }
     },
 })
@@ -82,11 +96,39 @@ export default defineComponent({
     }
 
     .list-item {
+        position: relative;
         background-color: #6495ff;
         margin-left: 10px;
         margin-right: 10px;
         margin-top: 10px;
         margin-bottom: 20px;
+
+        .btn {
+            position: absolute;
+            bottom: 10px;
+            width: 70px;
+            height: 30px;
+            border: none;
+            color: black;
+            border-radius: 10px;
+            opacity: 0;
+            transition: all .5s;
+
+            &.copy-btn{
+                right: 30px;
+            }
+
+            &.watch-btn{
+                left: 30px;
+            }
+        }
+
+
+        &:hover{
+            .btn {
+                opacity: 1;
+            }
+        }
     }
 }
 </style>
