@@ -2,7 +2,7 @@
 
 const prog=require('commander');
 const init=require('./init.js');
-prog.version(require('./package.json').version);
+prog.version(require('../package.json').version);
 
 prog.command('init')
 	.description('build起服务一条龙')

@@ -9,7 +9,7 @@ const move=(async()=>{
 		if(err)
 			console.log(err);
 		console.log(src+'success');
-	});
+	}));
 });
 
 module.exports=move;
