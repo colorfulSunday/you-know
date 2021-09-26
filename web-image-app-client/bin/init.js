@@ -10,22 +10,23 @@ const chalk=require('chalk');
 const log=(ctx=>console.log(chalk.white(ctx)));
 
 function get_path(){
+	// console.log(get_path());
 	return path.resolve(__dirname);
 }
 
 const init=(async ()=>{
 	await clear();
-	console.log(get_path());
+	
 	// build
 	log('Frontend building...');
-	await execa('npm run build');
+	await execa('npm run build --prefix '+path.resolve(__dirname,'..'));
+	
 	
 	//
 	log('Creating config...');
 	const config=await conf();
-	
 	// console.log(config);
-	fs.writeFileSync(get_path()+'\\..\\..\\web-image-server\\config\\config.js',config);
+	fs.writeFileSync(path.resolve(__dirname,'../..')+'\\web-image-app-server\\config\\config.js',config,'utf-8');
 	
 	//
 	log('Moving ./dist to backend...');
@@ -33,9 +34,15 @@ const init=(async ()=>{
 	
 	//
 	log('Starting serve...');
-	await execa('cd ..\\web-image-server\\');
-	await execa('npm i');
-	await execa('npm start');
+	await execa('npm start --prefix '+path.resolve(__dirname,'../..')+'\\web-image-app-server');
+	.then((rev,rej)=>{
+		if(rev)
+			console.log('success');
+		if(rej){
+			console.log(rej);
+			await execa('npm stop --prefix '+path.resolve(__dirname,'../..')+'\\web-image-app-server');
+		}
+	});
 });
 
 module.exports=init;
